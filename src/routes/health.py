@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Annotated
 
 from src.service.health import HealthService
 from src.models.health import HealthCheckResponseModel
@@ -13,5 +14,5 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=HealthCheckResponseModel)
-async def health_check(session: AsyncSession = Depends(get_db)):
+async def health_check(session: Annotated[AsyncSession, Depends(get_db)]):
     return await HealthService(session).execute()
