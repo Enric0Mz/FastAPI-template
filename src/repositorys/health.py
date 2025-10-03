@@ -16,4 +16,3 @@ class HealthRepository:
     async def get_server_version(self) -> str:
         result = await self._database.execute(text("SHOW server_version;"))
         return result.scalar_one()
-    

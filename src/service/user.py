@@ -1,0 +1,13 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.repositorys.user import UserRepository
+from src.models.user import CreateUserModel
+
+class CreateUserService:
+    def __init__(self, session: AsyncSession, data: CreateUserModel) -> None:
+        self._repository = UserRepository(session)
+        self._data = data
+
+    async def execute(self):
+        result = await self._repository.create(self._data)
+        return result
