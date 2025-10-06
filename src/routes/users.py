@@ -14,7 +14,6 @@ router = APIRouter(
     tags=["Users"]
 )
 
-@router.post("/", response_model=UserModel)
+@router.post("/", response_model=UserModel, status_code=201)
 async def create_user(session: Annotated[AsyncSession, Depends(get_db)], body: CreateUserModel):
     return await CreateUserService(session, body).execute()
-

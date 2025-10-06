@@ -14,7 +14,6 @@ from src.entitys.base import Base
 
 
 custom_loadenv()
-print("NOME DO DADOS DE BANCOS", os.getenv("DATABASE_URL"))
 
 
 # this is the Alembic Config object, which provides
