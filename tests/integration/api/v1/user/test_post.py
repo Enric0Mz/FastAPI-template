@@ -21,7 +21,6 @@ async def test_create_user_with_correct_payload():
     assert response.status_code == 201
 
     response_body = response.json()
-    print("CORPODAREQUEST", response_body)
 
     assert response_body["username"] == payload["username"]
     assert response_body["email"] == payload["email"]
