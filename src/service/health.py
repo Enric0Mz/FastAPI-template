@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.repository.health import HealthRepository
+from src.repositorys.health import HealthRepository
 from src.models.health import HealthCheckResponseModel, HealthChekModel
 from src.infra.database import POSTGRES_DB
 

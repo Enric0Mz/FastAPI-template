@@ -8,5 +8,3 @@ class HealthChekModel(BaseModel):
 class HealthCheckResponseModel(BaseModel):
     api_status: str
     details: HealthChekModel
-
-

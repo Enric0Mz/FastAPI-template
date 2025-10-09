@@ -1,6 +1,10 @@
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi.responses import JSONResponse
 
+from src.helpers.errors import BaseException
 from src.routes.health import router as health_router
+from src.routes.users import router as users_router
 
 
 app = FastAPI(
@@ -9,4 +13,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
+
 app.include_router(health_router)
+app.include_router(users_router)

@@ -1,11 +1,10 @@
-from fastapi.testclient import TestClient
-from src.main import app
+from httpx import AsyncClient
 
-client = TestClient(app)
+from tests.conftest import BASE_URL
 
-
-def test_health_check_returns_200_with_correct_payload():
-    response = client.get("/api/v1/health")
+async def test_health_check_returns_200_with_correct_payload():
+    async with AsyncClient() as client:
+        response = await client.get(f"{BASE_URL}/api/v1/health/")
 
     assert response.status_code == 200
 

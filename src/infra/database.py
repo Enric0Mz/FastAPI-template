@@ -1,14 +1,12 @@
 import os
-from dotenv import load_dotenv
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
+from src.helpers.load_env import custom_loadenv
+from src.helpers.errors import BaseException
 
-if os.path.exists('.env.local'):
-    load_dotenv(dotenv_path=".env.local", override=True)
-else:
-    load_dotenv()
+custom_loadenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 POSTGRES_DB = os.getenv("POSTGRES_DB")
@@ -29,7 +27,9 @@ async def get_db() -> AsyncGenerator:
     async with AsyncSessionLocal() as session:
         try:
             yield session
+            await session.commit()
         except Exception as e:
-            raise ConnectionRefusedError("Critical Error in Database", e)
+            await session.rollback()
+            raise
         finally:
             await session.close()
