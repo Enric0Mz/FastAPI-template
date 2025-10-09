@@ -1,10 +1,10 @@
 import os
-from dotenv import load_dotenv
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 from src.helpers.load_env import custom_loadenv
+from src.helpers.errors import BaseException
 
 custom_loadenv()
 
@@ -30,6 +30,6 @@ async def get_db() -> AsyncGenerator:
             await session.commit()
         except Exception as e:
             await session.rollback()
-            raise ConnectionRefusedError("Critical Error in Database", e)
+            raise
         finally:
             await session.close()
