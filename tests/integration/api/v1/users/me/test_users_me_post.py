@@ -17,9 +17,14 @@ async def test_check_self_information_with_loged_session():
     assert response.status_code == 200
 
     response_body = response.json()
+    user_response = response_body.get("user")
+    session_response = response_body.get("session")
+    print(session)
     
-    assert response_body.get("username") == payload.get("username")
-    assert response_body.get("email") == payload.get("email")
+    assert user_response.get("username") == payload.get("username")
+    assert user_response.get("email") == payload.get("email")
+    assert session_response.get("token") == session.access_token
+    assert session_response.get("expires_at") > str(session.expires_at)
 
 
 asyncio.run(clear_tables())

@@ -31,7 +31,7 @@ class SessionRepository:
 
         return session
     
-    async def refresh(self, user_id: int, expires_delta: int) -> None:
+    async def refresh(self, user_id: int, expires_delta: int) -> Session:
         q = update(Session).where(Session.user_id == user_id).values(expires_at=expires_at(expires_delta)).returning(Session)
         result = await self._database.execute(q)
         return result.scalars().first()
