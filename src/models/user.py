@@ -39,3 +39,7 @@ class CreateUserModel(UserModel):
 
         return v
 
+
+class UserLoginModel(BaseModel):
+    email: EmailStr
+    password: str = Field(serialization_alias="hashed_password")

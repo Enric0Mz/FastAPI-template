@@ -23,7 +23,6 @@ async def test_create_session_with_correct_user_and_password():
     assert response.status_code == 201
 
     response_body = response.json()
-    print(f"{response_body['expires_at']} MAIOR QUE {str(datetime.now(timezone.utc))}")
 
     assert "access_token" in response_body
     assert response_body["token_type"] == "Bearer"

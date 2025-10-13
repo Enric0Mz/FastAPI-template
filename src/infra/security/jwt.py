@@ -23,5 +23,3 @@ def create_acess_token(data: dict, expires_at: datetime):
     to_encode = data.copy()
     to_encode.update({"exp": expires_at})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITH)
-
-
