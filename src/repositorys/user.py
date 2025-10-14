@@ -14,13 +14,6 @@ class UserRepository:
         q = select(User).where(or_(User.email == email, User.username == username))
         result = await self._database.execute(q)
         return result.scalars().first()
-    
-    async def get_by_id(self, id: int) -> User | None:
-        q = select(User).where(User.id == id)
-        result = await self._database.execute(q)
-
-        return result.scalars().first()
-
 
     async def create(self, data: CreateUserModel) -> User:
         existing_user = await self.get(data.email, data.username)

@@ -3,7 +3,6 @@ import asyncio
 from httpx import AsyncClient
 
 from tests.conftest import clear_tables, create_session, BASE_URL
-from src.models.user import CreateUserModel
 
 asyncio.run(clear_tables())
 

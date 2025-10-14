@@ -30,8 +30,8 @@ class ConflictException(BaseException):
 
 
 class UnauthenticatedExpection(BaseException):
-    def __init__(self):
-        message = "Invalid or expired authorization token"
+    def __init__(self, custom_message: Optional[str | None] = None):
+        message = custom_message or "Invalid or expired authorization token"
         error = "UnauthorizedError"
         status_code = 401
         action = "Provide a valid authorization token"
