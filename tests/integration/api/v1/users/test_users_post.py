@@ -42,7 +42,7 @@ async def test_create_user_with_duplicate_email():
     response_body = response.json()
     detail = response_body["detail"]
     assert detail["error"] == "ConflictError"
-    assert detail["message"] == f"A 'email' with the identifier '{payload['email']}' already exists."
+    assert detail["message"] == f"A 'email' with the identifier '{payload['email']}' already exists"
 
 
 @pytest.mark.asyncio
@@ -61,7 +61,7 @@ async def test_create_user_with_duplicate_username():
     detail = response_body["detail"]
 
     assert detail["error"] == "ConflictError"
-    assert detail["message"] == f"A 'username' with the identifier '{payload['username']}' already exists."
+    assert detail["message"] == f"A 'username' with the identifier '{payload['username']}' already exists"
 
 @pytest.mark.parametrize("invalid_password, expected_msg_part", [
     ("short", "String should have at least 8 characters"),

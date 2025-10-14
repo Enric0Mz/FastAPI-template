@@ -22,8 +22,18 @@ class BaseException(HTTPException):
 
 class ConflictException(BaseException):
     def __init__(self, resource_name: str, identifier: str) -> None:
-        message = f"A '{resource_name}' with the identifier '{identifier}' already exists."
+        message = f"A '{resource_name}' with the identifier '{identifier}' already exists"
         error = "ConflictError"
         status_code = 409
-        action = "The resource could not be created. Please try again with a different identifier."
+        action = "The resource could not be created. Please try again with a different identifier"
         super().__init__(message, error, status_code, action)
+
+
+class UnauthenticatedExpection(BaseException):
+    def __init__(self):
+        message = "Invalid or expired authorization token"
+        error = "UnauthorizedError"
+        status_code = 401
+        action = "Provide a valid authorization token"
+        super().__init__(message, error, status_code, action)
+    

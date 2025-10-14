@@ -19,12 +19,41 @@ async def test_check_self_information_with_loged_session():
     response_body = response.json()
     user_response = response_body.get("user")
     session_response = response_body.get("session")
-    print(session)
     
     assert user_response.get("username") == payload.get("username")
     assert user_response.get("email") == payload.get("email")
     assert session_response.get("token") == session.access_token
     assert session_response.get("expires_at") > str(session.expires_at)
+
+
+@pytest.mark.asyncio
+async def test_check_self_information_without_token():
+    async with AsyncClient() as client:
+        response = await client.get(f"{BASE_URL}/api/v1/users/me")
+    
+    assert response.status_code == 401
+    response_body = response.json()
+    assert "detail" in response_body
+    details = response_body.get("detail")
+
+    assert details.get("message") == "Invalid or expired authorization token"
+    assert details.get("error") == "UnauthorizedError"
+    assert details.get("action") == "Provide a valid authorization token"
+
+@pytest.mark.asyncio
+async def test_check_self_information_with_invalid_token():
+
+    async with AsyncClient() as client:
+        response = await client.get(f"{BASE_URL}/api/v1/users/me", headers={"token": "invalid-token-string"})
+    
+    assert response.status_code == 401
+    response_body = response.json()
+    assert "detail" in response_body
+    details = response_body.get("detail")
+
+    assert details.get("message") == "Invalid or expired authorization token"
+    assert details.get("error") == "UnauthorizedError"
+    assert details.get("action") == "Provide a valid authorization token"
 
 
 asyncio.run(clear_tables())

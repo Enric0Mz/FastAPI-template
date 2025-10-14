@@ -1,5 +1,4 @@
 from fastapi.security import APIKeyHeader
-from fastapi.exceptions import HTTPException
 from fastapi import Depends
 from typing import Annotated
 
@@ -11,25 +10,26 @@ from src.repositorys.user import UserRepository
 from src.models.session import SessionWithUserModel
 from src.models.session import SessionModel
 from src.models.user import UserModel
+from src.helpers.errors import UnauthenticatedExpection
 
 
-oauth2_scheme = APIKeyHeader(name="token")
+oauth2_scheme = APIKeyHeader(name="token", auto_error=False)
 
 async def validate_session_middleware(session: Annotated[AsyncSession, Depends(get_db)], token: Annotated[str, Depends(oauth2_scheme)] ):
     if not token:
-        raise HTTPException(401, "Provide a valid authentication token")
+        raise UnauthenticatedExpection()
     
     repository = SessionRepository(session)
 
     session_item = await repository.get_by_token(token)
     if not session_item:
-        raise HTTPException(401, "Invalid or expired session")
+        raise UnauthenticatedExpection()
 
     user_repository = UserRepository(session)
     user = await user_repository.get_by_id(session_item.user_id)
     
     if not user:
-        raise HTTPException(401, "Provide a valid authentication token")
+        raise UnauthenticatedExpection()
 
     user_result = UserModel(username=user.username, email=user.email)
 
