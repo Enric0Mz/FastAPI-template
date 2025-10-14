@@ -50,7 +50,7 @@ async def test_check_self_information_with_invalid_token():
     assert "detail" in response_body
     details = response_body.get("detail")
 
-    assert details.get("message") == "Invalid or expired authorization token"
+    assert details.get("message") == "Invalid authorization token"
     assert details.get("error") == "UnauthorizedError"
     assert details.get("action") == "Provide a valid authorization token"
 

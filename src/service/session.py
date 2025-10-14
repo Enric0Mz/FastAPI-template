@@ -22,7 +22,7 @@ class LoginService:
         EXPIRES_DELTA = 60 # 1h
         user = await self._user_database.get(self._data.username)
         if not user:
-            raise HTTPException(400, "Incorrect username or passowrd") #TODO Implement CustomException
+            raise HTTPException(400, "Incorrect username or password") #TODO Implement CustomException
         
         password = verify_password(self._data.password, user.hashed_password)
         if not password:

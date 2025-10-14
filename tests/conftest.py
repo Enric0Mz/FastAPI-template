@@ -37,6 +37,3 @@ async def create_session(optional_user: Optional[dict] = None) -> TokenModel:
         if response.status_code != 201:
             raise ConnectionRefusedError("An error ocurred when creating session")
         return TokenModel(**response.json())
-
-
-
