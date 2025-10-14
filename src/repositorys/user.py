@@ -10,12 +10,12 @@ class UserRepository:
     def __init__(self, session: AsyncSession):
         self._database = session
 
-    async def get(self, email: Optional[str] = None, username : Optional[str] = None) -> User:
+    async def get(self, email: Optional[str] = None, username : Optional[str] = None) -> User | None:
         q = select(User).where(or_(User.email == email, User.username == username))
         result = await self._database.execute(q)
         return result.scalars().first()
     
-    async def get_by_id(self, id: int) -> User:
+    async def get_by_id(self, id: int) -> User | None:
         q = select(User).where(User.id == id)
         result = await self._database.execute(q)
 

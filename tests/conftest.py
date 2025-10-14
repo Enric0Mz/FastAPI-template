@@ -9,10 +9,10 @@ BASE_URL = "http://localhost:8000"
 
 async def clear_tables() -> None:
     async with AsyncClient() as client:
-        return await client.delete(f"{BASE_URL}/api/v1/health/")
+        await client.delete(f"{BASE_URL}/api/v1/health/")
 
 
-async def create_mock_user(optional_payload: Optional[CreateUserModel] = None) -> CreateUserModel:
+async def create_mock_user(optional_payload: Optional[dict] = None) -> CreateUserModel:
     payload = optional_payload or {
         "username": "MockUser",
         "email": "mock@user.com",
@@ -26,7 +26,7 @@ async def create_mock_user(optional_payload: Optional[CreateUserModel] = None) -
     return CreateUserModel(**payload)
 
 
-async def create_session(optional_user: Optional[CreateUserModel] = None) -> TokenModel:
+async def create_session(optional_user: Optional[dict] = None) -> TokenModel:
     if optional_user:
         user = await create_mock_user(optional_user)
     else:

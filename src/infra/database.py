@@ -7,12 +7,12 @@ from src.helpers.load_env import custom_loadenv
 
 custom_loadenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", default="DATABASE_URL")
 POSTGRES_DB = os.getenv("POSTGRES_DB")
 
 engine = create_async_engine(DATABASE_URL, echo=False)
 
-AsyncSessionLocal = sessionmaker(
+AsyncSessionLocal = sessionmaker(  # type: ignore[call-overload]
     bind=engine,
     class_=AsyncSession,
     expire_on_commit=False,
