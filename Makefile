@@ -120,7 +120,7 @@ db-logs:
 # Migrations (Alembic)
 # ==============================================================================
 migrate: db-up
-	@$(VENV_RUN) alembic -c ${MIGRATIONS_DIR} upgrade head
+	@cd $(MIGRATIONS_DIR) && $(VENV_RUN) alembic -c ${MIGRATIONS_DIR} upgrade head
 
 migrate-new: db-up
-	@cd src/infra && $(VENV_RUN) alembic revision --autogenerate -m "$(M)"
+	@cd $(MIGRATIONS_DIR) && $(VENV_RUN) alembic revision --autogenerate -m "$(M)"
