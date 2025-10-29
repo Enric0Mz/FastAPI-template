@@ -22,6 +22,7 @@ AsyncSessionLocal = sessionmaker(  # type: ignore[call-overload]
 
 Base = declarative_base()
 
+
 async def get_db() -> AsyncGenerator:
     async with AsyncSessionLocal() as session:
         try:

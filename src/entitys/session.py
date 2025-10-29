@@ -6,7 +6,6 @@ from sqlalchemy import TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
-from .base import Base
 
 
 class Session(Base):

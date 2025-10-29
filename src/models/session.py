@@ -3,6 +3,7 @@ from datetime import datetime
 
 from src.models.user import UserModel
 
+
 class SessionModel(BaseModel):
     token: str
     expires_at: datetime

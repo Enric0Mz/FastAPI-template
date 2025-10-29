@@ -16,35 +16,36 @@ from src.helpers.errors import UnauthenticatedExpection
 
 api_key_scheme = APIKeyHeader(name="token", auto_error=False)
 
-async def validate_session_middleware(session: Annotated[AsyncSession, Depends(get_db)], token: Annotated[str, Depends(api_key_scheme)] ):
+
+async def validate_session_middleware(
+    session: Annotated[AsyncSession, Depends(get_db)],
+    token: Annotated[str, Depends(api_key_scheme)],
+):
     if not token:
         raise UnauthenticatedExpection()
-    
+
     repository = SessionRepository(session)
 
     decoded_token = decode_access_token(token)
 
     user_repository = UserRepository(session)
     user = await user_repository.get(decoded_token)
-    
+
     if not user:
         raise UnauthenticatedExpection()
 
     user_result = UserModel(username=user.username, email=user.email)
 
-    EXPIRES_DELTA = 10 # minutes
+    EXPIRES_DELTA = 10  # minutes
     refreshed_session = await repository.refresh(user.id, EXPIRES_DELTA)
 
     if not refreshed_session:
-        raise UnauthenticatedExpection() 
+        raise UnauthenticatedExpection()
 
     refreshed_session_result = SessionModel(
         token=token,
         expires_at=refreshed_session.expires_at,
-        user_id=refreshed_session.user_id
+        user_id=refreshed_session.user_id,
     )
 
-    return SessionWithUserModel(
-        session=refreshed_session_result,
-        user=user_result
-    )
+    return SessionWithUserModel(session=refreshed_session_result, user=user_result)

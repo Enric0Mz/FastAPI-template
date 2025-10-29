@@ -16,7 +16,7 @@ async def create_mock_user(optional_payload: Optional[dict] = None) -> CreateUse
     payload = optional_payload or {
         "username": "MockUser",
         "email": "mock@user.com",
-        "password": "MockPassword123!"
+        "password": "MockPassword123!",
     }
 
     async with AsyncClient() as client:
@@ -33,7 +33,10 @@ async def create_session(optional_user: Optional[dict] = None) -> TokenModel:
         user = await create_mock_user()
 
     async with AsyncClient() as client:
-        response = await client.post(f"{BASE_URL}/api/v1/sessions/", data={"username": user.email, "password": user.password})
+        response = await client.post(
+            f"{BASE_URL}/api/v1/sessions/",
+            data={"username": user.email, "password": user.password},
+        )
         if response.status_code != 201:
             raise ConnectionRefusedError("An error ocurred when creating session")
         return TokenModel(**response.json())

@@ -6,11 +6,14 @@ from src.helpers.errors import ConflictException
 from src.entitys.user import User
 from src.models.user import CreateUserModel
 
+
 class UserRepository:
     def __init__(self, session: AsyncSession):
         self._database = session
 
-    async def get(self, email: Optional[str] = None, username : Optional[str] = None) -> User | None:
+    async def get(
+        self, email: Optional[str] = None, username: Optional[str] = None
+    ) -> User | None:
         q = select(User).where(or_(User.email == email, User.username == username))
         result = await self._database.execute(q)
         return result.scalars().first()
@@ -21,7 +24,7 @@ class UserRepository:
             if existing_user.email == data.email:
                 raise ConflictException("email", data.email)
             elif existing_user.username == data.username:
-                raise ConflictException("username", data.username) 
+                raise ConflictException("username", data.username)
 
         user = User(**data.model_dump(by_alias=True))
 

@@ -2,6 +2,7 @@ from httpx import AsyncClient
 
 from tests.conftest import BASE_URL
 
+
 async def test_health_check_returns_200_with_correct_payload():
     async with AsyncClient() as client:
         response = await client.get(f"{BASE_URL}/api/v1/health/")

@@ -11,7 +11,6 @@ from src.repositorys.user import UserRepository
 from src.infra.security.password import verify_password
 
 
-
 class LoginService:
     def __init__(self, session: AsyncSession, data: OAuth2PasswordRequestForm) -> None:
         self._database = SessionRepository(session)
@@ -19,21 +18,25 @@ class LoginService:
         self._data = data
 
     async def execute(self):
-        EXPIRES_DELTA = 60 # 1h
+        EXPIRES_DELTA = 60  # 1h
         user = await self._user_database.get(self._data.username)
         if not user:
-            raise HTTPException(400, "Incorrect username or password") #TODO Implement CustomException
-        
+            raise HTTPException(
+                400, "Incorrect username or password"
+            )  # TODO Implement CustomException
+
         password = verify_password(self._data.password, user.hashed_password)
         if not password:
-            raise HTTPException(400, "Incorrect username or password") # TODO same thing kkkk
-        
+            raise HTTPException(
+                400, "Incorrect username or password"
+            )  # TODO same thing kkkk
+
         expires = expires_at(EXPIRES_DELTA)
         access_token = create_access_token({"sub": user.email}, expires)
-        await self._database.create(SessionModel(token=access_token, user_id=user.id, expires_at=expires))
+        await self._database.create(
+            SessionModel(token=access_token, user_id=user.id, expires_at=expires)
+        )
 
         return TokenModel(
-            access_token=access_token,
-            expires_at=expires,
-            token_type="Bearer"
+            access_token=access_token, expires_at=expires, token_type="Bearer"
         )

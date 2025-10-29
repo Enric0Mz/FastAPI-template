@@ -4,6 +4,7 @@ from src.infra.security.password import hash_password
 from src.repositorys.user import UserRepository
 from src.models.user import CreateUserModel
 
+
 class CreateUserService:
     def __init__(self, session: AsyncSession, data: CreateUserModel) -> None:
         self._repository = UserRepository(session)

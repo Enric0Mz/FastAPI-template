@@ -14,6 +14,7 @@ custom_loadenv()
 SECRET_KEY = os.getenv("SECRET_JWT_KEY")
 ALGORITHM = os.getenv("JWT_ALGORITHM", "FALLBACK_ALGORITHM")
 
+
 def expires_at(expires_delta: int) -> datetime:
     return datetime.now(timezone.utc) + timedelta(minutes=expires_delta)
 
