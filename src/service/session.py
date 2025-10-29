@@ -9,6 +9,7 @@ from src.models.session import SessionModel
 from src.repositorys.sessions import SessionRepository
 from src.repositorys.user import UserRepository
 from src.infra.security.password import verify_password
+from src.helpers.errors import BadRequestException
 
 
 class LoginService:
@@ -21,15 +22,11 @@ class LoginService:
         EXPIRES_DELTA = 60  # 1h
         user = await self._user_database.get(self._data.username)
         if not user:
-            raise HTTPException(
-                400, "Incorrect username or password"
-            )  # TODO Implement CustomException
+            raise BadRequestException("Incorrect username or password")
 
         password = verify_password(self._data.password, user.hashed_password)
         if not password:
-            raise HTTPException(
-                400, "Incorrect username or password"
-            )  # TODO same thing kkkk
+            raise BadRequestException("Incorrect username or password")
 
         expires = expires_at(EXPIRES_DELTA)
         access_token = create_access_token({"sub": user.email}, expires)

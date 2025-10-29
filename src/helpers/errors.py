@@ -42,3 +42,12 @@ class UnauthenticatedExpection(BaseException):
         status_code = 401
         action = "Provide a valid authorization token"
         super().__init__(message, error, status_code, action)
+
+
+class BadRequestException(BaseException):
+    def __init__(self, custom_message: Optional[str | None] = None):
+        message = custom_message or "The request sended was malformed"
+        error = "BadRequestError"
+        status_code = 400
+        action = "Send a valid request to the server"
+        super().__init__(message, error, status_code, action)

@@ -43,8 +43,11 @@ async def test_create_session_with_incorrect_password():
 
     assert response.status_code == 400
     response_body = response.json()
-    print(response_body)
-    assert response_body["detail"] == "Incorrect username or password"
+    assert response_body["detail"] == {
+        "error": "BadRequestError",
+        "message": "Incorrect username or password",
+        "action": "Send a valid request to the server",
+    }
 
 
 @pytest.mark.asyncio
@@ -56,7 +59,11 @@ async def test_create_session_with_non_existent_user():
 
     assert response.status_code == 400
     response_body = response.json()
-    assert response_body["detail"] == "Incorrect username or password"
+    assert response_body["detail"] == {
+        "error": "BadRequestError",
+        "message": "Incorrect username or password",
+        "action": "Send a valid request to the server",
+    }
 
 
 asyncio.run(clear_tables())

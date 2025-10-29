@@ -18,6 +18,7 @@ router = APIRouter(prefix="/api/v1/health", tags=["Health"])
 async def health_check(session: Annotated[AsyncSession, Depends(get_db)]):
     return await HealthService(session).execute()
 
+
 if ENV == "development":
 
     @router.delete("/", include_in_schema=False)
