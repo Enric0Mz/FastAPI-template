@@ -16,7 +16,7 @@ class AuthServiceEnum(enum.Enum):
 class UserModel(BaseModel):
     username: str = Field(min_length=1, max_length=50)
     email: EmailStr
-    auth_provider: AuthServiceEnum = Field(default=AuthServiceEnum.LOCAL.value)
+    auth_provider: str = Field(default=AuthServiceEnum.LOCAL.value)
 
 
 class GoogleUserModel(UserModel):

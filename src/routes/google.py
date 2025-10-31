@@ -13,7 +13,7 @@ from src.models.user import AuthServiceEnum
 router = APIRouter(tags=["Google"])
 
 
-@router.get("/login", include_in_schema=False)
+@router.get("/google/login", include_in_schema=False)
 async def google_login(request: Request):
     redirect_url = request.url_for("auth_callback")
     return await oauth.google.authorize_redirect(request, redirect_url)
@@ -30,6 +30,7 @@ async def auth_callback(
         email=user_info["email"],
         username=user_info.get("name", ""),
         google_id=user_info["sub"],
+        auth_provider=AuthServiceEnum.GOOGLE.value
     )
 
     return await CreateOrGetGoogleUser(session, google_payload).execute()
