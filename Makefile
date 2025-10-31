@@ -124,3 +124,13 @@ migrate: db-up
 
 migrate-new: db-up
 	@cd $(MIGRATIONS_DIR) && $(VENV_RUN) alembic revision --autogenerate -m "$(M)"
+
+# ==============================================================================
+# Git
+# ==============================================================================
+
+commit:
+	@$(VENV_RUN) cz c
+
+ammend:
+	@git commit --amend
