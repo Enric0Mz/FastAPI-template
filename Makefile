@@ -84,7 +84,7 @@ clean:
 # Local Development
 # ==============================================================================
 
-run:
+run: db-up
 	@$(VENV_RUN) uvicorn $(APP_MODULE) --host 127.0.0.1 --port 8000 --reload
 
 test:
@@ -120,7 +120,7 @@ db-logs:
 # Migrations (Alembic)
 # ==============================================================================
 migrate: db-up
-	@cd $(MIGRATIONS_DIR) && $(VENV_RUN) alembic -c ${MIGRATIONS_DIR} upgrade head
+	@cd $(MIGRATIONS_DIR) && $(VENV_RUN) alembic upgrade head
 
 migrate-new: db-up
 	@cd $(MIGRATIONS_DIR) && $(VENV_RUN) alembic revision --autogenerate -m "$(M)"
