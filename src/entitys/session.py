@@ -15,4 +15,4 @@ class Session(Base):
     expires_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    user: Mapped["User"] = relationship(back_populates="sessions")
+    user: Mapped["User"] = relationship(back_populates="sessions") # type: ignore
