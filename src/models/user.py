@@ -1,4 +1,6 @@
 import re
+import enum
+from typing import Optional
 
 from pydantic import BaseModel
 from pydantic import EmailStr
@@ -6,9 +8,19 @@ from pydantic import Field
 from pydantic import field_validator
 
 
+class AuthServiceEnum(enum.Enum):
+    LOCAL = "local"
+    GOOGLE = "google"
+
+
 class UserModel(BaseModel):
-    username:str = Field(min_length=1, max_length=50)
+    username: str = Field(min_length=1, max_length=50)
     email: EmailStr
+    auth_provider: str = Field(default=AuthServiceEnum.LOCAL.value)
+
+
+class GoogleUserModel(UserModel):
+    google_id: str
 
 
 class CreateUserModel(UserModel):
@@ -25,17 +37,21 @@ class CreateUserModel(UserModel):
         - At least one special symbol
         The minimum length is handled by Field().
         """
-        if not re.search(r'[a-z]', v):
-            raise ValueError('Password must contain at least one lowercase letter')
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
 
-        if not re.search(r'[A-Z]', v):
-            raise ValueError('Password must contain at least one uppercase letter')
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
 
-        if not re.search(r'\d', v):
-            raise ValueError('Password must contain at least one number')
+        if not re.search(r"\d", v):
+            raise ValueError("Password must contain at least one number")
 
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', v):
-            raise ValueError('Password must contain at least one special symbol')
+            raise ValueError("Password must contain at least one special symbol")
 
         return v
 
+
+class UserLoginModel(BaseModel):
+    email: EmailStr
+    password: str = Field(serialization_alias="hashed_password")
