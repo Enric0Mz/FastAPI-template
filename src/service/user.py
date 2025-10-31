@@ -5,6 +5,7 @@ from src.repositorys.user import UserRepository
 from src.models.user import CreateUserModel
 from src.models.user import GoogleUserModel
 from src.service.session import LoginService
+from src.models.session import SessionWithUserModel
 
 
 class CreateUserService:
@@ -31,3 +32,12 @@ class CreateOrGetGoogleUser:
 
         new_user = await self._repository.create(self._data)
         return await LoginService(self._session, new_user).execute()
+
+
+class InvalidateUserService:
+    def __init__(self, session: AsyncSession, user_session: SessionWithUserModel):
+        self._repository = UserRepository(session)
+        self._user_session = user_session
+
+    async def execute(self):
+        await self._repository.invalidate(self._user_session.session.user_id)

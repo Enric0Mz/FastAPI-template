@@ -6,6 +6,7 @@ from src.models.session import SessionWithUserModel
 from src.models.user import UserModel
 from src.models.user import CreateUserModel
 from src.service.user import CreateUserService
+from src.service.user import InvalidateUserService
 
 from src.infra.database import get_db
 from src.middlewares.authentication import validate_session_middleware
@@ -26,3 +27,7 @@ async def create_user(
     session: Annotated[AsyncSession, Depends(get_db)], body: CreateUserModel
 ):
     return await CreateUserService(session, body).execute()
+
+@router.delete("/me", status_code=204)
+async def delete_user(session: Annotated[AsyncSession, Depends(get_db)], user_session: Annotated[SessionWithUserModel, Depends(validate_session_middleware)]):
+    return await InvalidateUserService(session, user_session).execute()

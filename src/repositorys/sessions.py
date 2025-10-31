@@ -7,6 +7,7 @@ from datetime import timezone
 
 from src.infra.security.jwt import expires_at as expires_at_
 from src.entitys.session import Session
+from src.entitys.user import User
 from src.models.session import SessionModel
 
 
@@ -15,9 +16,15 @@ class SessionRepository:
         self._database = session
 
     async def get_by_token(self, token: str):
-        q = select(Session).where(
-            and_(
-                Session.token == token, Session.expires_at > datetime.now(timezone.utc)
+        q = (
+            select(Session)
+            .join(User, Session.user_id == User.id)
+            .where(
+                and_(
+                    Session.token == token,
+                    Session.expires_at > datetime.now(timezone.utc),
+                    User.inactive.is_(None)
+                )
             )
         )
 

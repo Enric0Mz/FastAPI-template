@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, update
 from typing import Optional
+from datetime import datetime
+from datetime import timezone
 
 from src.helpers.errors import ConflictException
 from src.entitys.user import User
@@ -41,3 +43,11 @@ class UserRepository:
         result = await self._database.execute(q)
 
         return result.scalars().first()
+
+    
+    async def invalidate(self, id: int) -> None:
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        q = update(User).where(User.id == id).values(inactive=now).returning(User)
+        result = await self._database.execute(q)
+        print(result.scalars().first())
+
