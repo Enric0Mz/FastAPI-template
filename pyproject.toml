@@ -23,6 +23,8 @@ pwdlib = {extras = ["argon2"], version = "^0.2.1"}
 httpx = ">=0.23.0"
 pyjwt = "^2.10.1"
 python-multipart = "^0.0.20"
+authlib = "^1.6.5"
+itsdangerous = "^2.2.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -35,5 +37,6 @@ dev = [
     "alembic (>=1.16.5,<2.0.0)",
     "pytest-asyncio (>=1.2.0,<2.0.0)",
     "ruff (>=0.14.2,<0.15.0)",
-    "black (>=25.9.0,<26.0.0)"
+    "black (>=25.9.0,<26.0.0)",
+    "types-authlib (>=1.6.5.20251005,<2.0.0.0)"
 ]
