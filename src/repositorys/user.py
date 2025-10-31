@@ -5,6 +5,7 @@ from typing import Optional
 from src.helpers.errors import ConflictException
 from src.entitys.user import User
 from src.models.user import CreateUserModel
+from src.models.user import UserModel
 
 
 class UserRepository:
@@ -33,3 +34,10 @@ class UserRepository:
         await self._database.refresh(user)
 
         return user
+
+    async def get_with_google_id(self, google_id: str) -> User | None:
+        q = select(User).where(User.google_id == google_id)
+
+        result = await self._database.execute(q)
+
+        return result.scalars().first()

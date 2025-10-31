@@ -1,4 +1,6 @@
 import re
+import enum
+from typing import Optional
 
 from pydantic import BaseModel
 from pydantic import EmailStr
@@ -6,9 +8,19 @@ from pydantic import Field
 from pydantic import field_validator
 
 
+class AuthServiceEnum(enum.Enum):
+    LOCAL = "local"
+    GOOGLE = "google"
+
+
 class UserModel(BaseModel):
     username: str = Field(min_length=1, max_length=50)
     email: EmailStr
+    auth_provider: AuthServiceEnum = Field(default=AuthServiceEnum.LOCAL.value)
+
+
+class GoogleUserModel(UserModel):
+    google_id: str
 
 
 class CreateUserModel(UserModel):
