@@ -5,7 +5,7 @@ from sqlalchemy import update
 from datetime import datetime
 from datetime import timezone
 
-from src.infra.security.jwt import expires_at
+from src.infra.security.jwt import expires_at as expires_at_
 from src.entitys.session import Session
 from src.models.session import SessionModel
 
@@ -39,7 +39,7 @@ class SessionRepository:
         q = (
             update(Session)
             .where(Session.user_id == user_id)
-            .values(expires_at=expires_at(expires_delta))
+            .values(expires_at=expires_at_(expires_delta))
             .returning(Session)
         )
         result = await self._database.execute(q)

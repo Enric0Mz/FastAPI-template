@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from datetime import timedelta
+from datetime import datetime
+from datetime import timezone
 
 from src.infra.security.jwt import create_access_token
 from src.infra.security.jwt import expires_at
@@ -11,6 +13,7 @@ from src.repositorys.user import UserRepository
 from src.infra.security.password import verify_password
 from src.helpers.errors import BadRequestException
 from src.entitys.user import User
+from src.models.user import UserModel
 
 
 class LoginService:
@@ -55,3 +58,11 @@ class LoginService:
         return TokenModel(
             access_token=access_token, expires_at=expires, token_type="Bearer"
         )
+
+
+class LogoutService:
+    def __init__(self, session: AsyncSession, user_id: int):
+        self._database = SessionRepository(session)
+        self._user_id = user_id
+    async def execute(self):
+        await self._database.refresh(self._user_id, 0)

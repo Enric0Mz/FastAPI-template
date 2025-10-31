@@ -25,6 +25,10 @@ async def validate_session_middleware(
         raise UnauthenticatedExpection()
 
     repository = SessionRepository(session)
+    valid_session = await repository.get_by_token(token)
+
+    if not valid_session:
+        raise UnauthenticatedExpection()
 
     decoded_token = decode_access_token(token)
 
@@ -33,6 +37,7 @@ async def validate_session_middleware(
 
     if not user:
         raise UnauthenticatedExpection()
+    
 
     user_result = UserModel(username=user.username, email=user.email)
 

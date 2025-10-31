@@ -4,7 +4,10 @@ from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.service.session import LoginService
+from src.service.session import LogoutService
 from src.models.token import TokenModel
+from src.models.session import SessionWithUserModel
+from src.middlewares.authentication import validate_session_middleware
 
 from src.infra.database import get_db
 
@@ -18,3 +21,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
     return await LoginService(session, form_data).execute()
+
+@router.delete("/", status_code=204)
+async def logout(session: Annotated[AsyncSession, Depends(get_db)], user: Annotated[SessionWithUserModel, Depends(validate_session_middleware)]):
+    return await LogoutService(session, user.session.user_id).execute()
