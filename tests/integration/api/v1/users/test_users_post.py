@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from tests.conftest import clear_tables
 
-asyncio.run(clear_tables())
+
 
 
 @pytest.mark.asyncio
@@ -114,5 +114,3 @@ async def test_create_user_with_invalid_password(invalid_password, expected_msg_
 
     assert error_details[0]["loc"] == ["body", "password"]
 
-
-asyncio.run(clear_tables())

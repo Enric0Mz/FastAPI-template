@@ -1,5 +1,6 @@
+import pytest
 from httpx import AsyncClient
-from typing import Optional
+from typing import Optional, AsyncGenerator
 
 from src.models.user import CreateUserModel
 from src.models.token import TokenModel
@@ -7,8 +8,11 @@ from src.models.token import TokenModel
 BASE_URL = "http://localhost:8000"
 
 
-async def clear_tables() -> None:
+@pytest.fixture(autouse=True, scope="module")
+async def clear_tables() -> AsyncGenerator[None, None]:
     async with AsyncClient() as client:
+        await client.delete(f"{BASE_URL}/api/v1/health/")
+        yield None
         await client.delete(f"{BASE_URL}/api/v1/health/")
 
 
@@ -16,11 +20,12 @@ async def create_mock_user(optional_payload: Optional[dict] = None) -> CreateUse
     payload = optional_payload or {
         "username": "MockUser",
         "email": "mock@user.com",
-        "password": "MockPassword123!",
+        "password": "MockPassword123!"
     }
 
     async with AsyncClient() as client:
         response = await client.post(f"{BASE_URL}/api/v1/users/", json=payload)
+    body = response.json()
     if response.status_code != 201:
         raise ConnectionRefusedError("An error ocurred when creating mock user")
     return CreateUserModel(**payload)

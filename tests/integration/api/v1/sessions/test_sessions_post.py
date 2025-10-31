@@ -6,7 +6,6 @@ from datetime import timezone
 
 from tests.conftest import clear_tables, create_mock_user, BASE_URL
 
-asyncio.run(clear_tables())
 
 
 @pytest.mark.asyncio
@@ -66,4 +65,3 @@ async def test_create_session_with_non_existent_user():
     }
 
 
-asyncio.run(clear_tables())

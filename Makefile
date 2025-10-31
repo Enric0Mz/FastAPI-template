@@ -88,7 +88,7 @@ run: db-up
 	@$(VENV_RUN) uvicorn $(APP_MODULE) --host 127.0.0.1 --port 8000 --reload
 
 test:
-	@$(VENV_RUN) pytest $(TEST_DIR)
+	@$(VENV_RUN) pytest $(TEST_DIR) -s
 
 format:
 	@echo "Formatting code..."
