@@ -17,11 +17,11 @@ class User(Base):
     role: Mapped[str] = mapped_column(String(15), nullable=True)
     google_id: Mapped[str] = mapped_column(String(100), nullable=True)
     auth_provider: Mapped[str] = mapped_column(
-        default=AuthProvider.LOCAL, server_default=AuthProvider.LOCAL.value
+        default=AuthProvider.LOCAL.value, server_default=AuthProvider.LOCAL.value
     )
-    # inactive: Mapped[datetime] = mapped_column(
-    #     nullable=True
-    # )
+    inactive: Mapped[datetime] = mapped_column(
+        nullable=True
+    )
 
     sessions: Mapped[list["Session"]] = relationship(  # type: ignore
         back_populates="user", cascade="all, delete-orphan"
