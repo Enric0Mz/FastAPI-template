@@ -25,7 +25,6 @@ async def create_mock_user(optional_payload: Optional[dict] = None) -> CreateUse
 
     async with AsyncClient() as client:
         response = await client.post(f"{BASE_URL}/api/v1/users/", json=payload)
-    body = response.json()
     if response.status_code != 201:
         raise ConnectionRefusedError("An error ocurred when creating mock user")
     return CreateUserModel(**payload)
